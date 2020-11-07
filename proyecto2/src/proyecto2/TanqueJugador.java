@@ -5,7 +5,9 @@
  */
 package proyecto2;
 
+import java.awt.Color;
 import java.awt.Image;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 /**
@@ -20,7 +22,8 @@ public class TanqueJugador extends Coordenada {
     private Image imagen;
     
     public Coordenada cor1 = new Coordenada();
-
+    
+    ArrayList balas = new ArrayList();
     
     public TanqueJugador(){
         super();
@@ -48,5 +51,24 @@ public class TanqueJugador extends Coordenada {
         return imagen;
     }
     
+    public BalaGrafica Bala(){
+        Coordenada salida = new Coordenada(this.cor1.getX()+50,this.cor1.getY()+50);
+        BalaGrafica bala = new BalaGrafica(salida, 10, Color.red);
+        
+        return bala;
+    }
+    
+    public void cicloBala(){
+        for(int i = 0; i < this.balas.size(); i++){
+            BalaGrafica y = (BalaGrafica)this.balas.get(i);
+            float x = y.getY();
+            y.setY(x -= 20);
+        }
+    }
+    
+    public void mover(Coordenada nva){
+        cor1.setX(this.Suma(nva).getX());
+        cor1.setY(this.Suma(nva).getY());
+    }
 }
 

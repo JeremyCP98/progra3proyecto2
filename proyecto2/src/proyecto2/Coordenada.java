@@ -42,4 +42,12 @@ public class Coordenada {
         this.y = y;
     }
     
+    public Coordenada Suma(Coordenada s){
+        float sumx = this.x + s.getX();
+        float sumy = this.y + s.getY();
+        
+        Coordenada sum = new Coordenada(sumx, sumy);
+        
+        return sum;
+    }    
 }

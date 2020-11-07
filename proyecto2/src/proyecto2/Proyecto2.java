@@ -25,6 +25,8 @@ public class Proyecto2 {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.getContentPane().add(new Pantalla(), BorderLayout.CENTER);
         ventana.setVisible(true);
+        Pantalla pantalla = new Pantalla();
+        pantalla.run();
     }
     
 }
