@@ -6,7 +6,9 @@
 package proyecto2;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
@@ -16,7 +18,7 @@ import javax.swing.ImageIcon;
  */
 
     
-public class TanqueJugador extends Coordenada {
+public class TanqueJugador extends Coordenada implements Dibujable{
     
     private ImageIcon ii;
     private Image imagen;
@@ -60,7 +62,7 @@ public class TanqueJugador extends Coordenada {
     }
     
     public BalaGrafica Bala(){ // 590.0 - 659.0
-        Coordenada salida = new Coordenada(this.getX() + 40,this.getY() - 200);
+        Coordenada salida = new Coordenada(this.getX() + 63,this.getY());
         System.out.println(salida.getX() + " - " + salida.getY());
         BalaGrafica bala = new BalaGrafica(salida, 10, Color.red);
         
@@ -78,6 +80,11 @@ public class TanqueJugador extends Coordenada {
     public void mover(Coordenada nva){
         setX(this.Suma(nva).getX());
         setY(this.Suma(nva).getY());
+    }
+
+    @Override
+    public void dibujar(Graphics dv) {
+        dv.drawImage(getImagen(), (int)getX(), (int)getY(), null);
     }
 }
 

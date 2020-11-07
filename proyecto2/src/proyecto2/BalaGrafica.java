@@ -12,14 +12,14 @@ import java.awt.Graphics;
  *
  * @author XperriX
  */
-public class BalaGrafica extends Bala {
+public class BalaGrafica extends Bala implements Dibujable{
     Color color;
     
     public BalaGrafica(Coordenada cor, float radio, Color col){
         super(cor,radio);
         this.color = col;
     }
-    
+    @Override
     public void dibujar(Graphics dv) {
         dv.setColor(color);
         dv.fillOval((int)(this.getX()-this.getRadio()),(int)(this.getY()-this.getRadio()), (int)(2*this.getRadio()), (int)(2*this.getRadio()));

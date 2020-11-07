@@ -5,6 +5,7 @@
  */
 package proyecto2;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
@@ -12,7 +13,7 @@ import javax.swing.ImageIcon;
  *
  * @author vtrej
  */
-public class TanqueEnemigo extends Coordenada implements Runnable {
+public class TanqueEnemigo extends Coordenada implements Runnable, Dibujable{
     
     private ImageIcon ii;
     private Image imagen;
@@ -59,5 +60,15 @@ public class TanqueEnemigo extends Coordenada implements Runnable {
            }
        }
     }
+
+    @Override
+    public void dibujar(Graphics dv) {
+        dv.drawImage(getImagen(), (int)getX(), (int)getY(), null);
+    }
     
+    public void ciclo(){
+        float x = this.getX();
+        if(x < 1100)this.setX(x += 5);
+        else this.setX(0);
+    }
 }

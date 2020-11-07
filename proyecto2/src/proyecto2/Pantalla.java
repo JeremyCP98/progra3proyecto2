@@ -5,7 +5,9 @@
  */
 package proyecto2;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -22,8 +24,9 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
     private TanqueEnemigo tanq3 = null;
     private TanqueEnemigo tanq4 = null;
     private TanqueEnemigo tanq5 = null;
+    private TanqueEnemigo tanq6 = null;
     private TanqueJugador tanqJug  = null;
-    
+    ArrayList enemigos = new ArrayList();
     String ruta;
     String ruta2;
     
@@ -38,7 +41,7 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
     Coordenada movNulo = new Coordenada(0,0);
     
     public Pantalla(){
-    ArrayList objetos = new ArrayList();
+    
     
     ruta = "tanqueEnemigo.png" ;
     ruta2 = "tanqueJugador.png";
@@ -47,17 +50,24 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
     tanq3 = new TanqueEnemigo(a,ruta);
     tanq4 = new TanqueEnemigo(a,ruta);
     tanq5 = new TanqueEnemigo(a,ruta);
+    tanq6 = new TanqueEnemigo(a,ruta);
     tanqJug = new TanqueJugador(b,ruta2);
     hiloControl = new Thread(this);//Se crea el hilo
     hiloControl.start(); //se inicia
-    objetos.add(tanq1);
-    objetos.add(tanq2);
-    objetos.add(tanq3);
-    objetos.add(tanq4);
-    objetos.add(tanq5);
-    objetos.add(tanqJug);
+    array.add(tanq1);
+    array.add(tanq2);
+    array.add(tanq3);
+    array.add(tanq4);
+    array.add(tanq5);
+    array.add(tanq6);
+    array.add(tanqJug);
     
-    this.array = objetos;
+    enemigos.add(tanq1);
+    enemigos.add(tanq2);
+    enemigos.add(tanq3);
+    enemigos.add(tanq4);
+    enemigos.add(tanq5);
+    enemigos.add(tanq6);
     this.addKeyListener(this);
     setFocusable(true);
     
@@ -71,18 +81,29 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
     tanq4.setX(350);
     tanq5.setY(150);
     tanq5.setX(750);
-    
+    tanq6.setY(150);
+    tanq6.setX(25);
     tanqJug.setY(859);
     tanqJug.setX(550);
     
     }
-    @Override
-    public void paintComponent(Graphics g){
+    //@Override
+    public void paint(Graphics g){
         
         super.paintComponent(g); //Permite la funcionalidad básica para dibujar el panel
         int anchoPanel = this.getWidth() / 10;
         int altoPanel = this.getHeight() / 10;
         
+        Dimension d = getSize();
+        Image Imagen = createImage(d.width,d.height);
+        Graphics buff = Imagen.getGraphics();
+        Dibujable div;
+        for(int i = 0; i < array.size(); i++)
+        {
+            div =  (Dibujable) array.get(i);
+            div.dibujar(buff);
+        }
+        g.drawImage(Imagen, 0, 0, null);
 //        int yNave1 = 0;
 //        int yNave2 = yNave1 + altoPanel;
 //        int yNave3 = yNave2 + altoPanel; 
@@ -97,21 +118,32 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
         
         
         
-         g.drawImage(tanqJug.getImagen(), (int)tanqJug.getX(), (int)tanqJug.getY(),anchoPanel, altoPanel,this);
-         g.drawImage(tanq1.getImagen(), (int)tanq1.getX(), (int)tanq1.getY(),anchoPanel, altoPanel,this);
-         g.drawImage(tanq2.getImagen(), (int)tanq2.getX(), (int)tanq2.getY(),anchoPanel, altoPanel,this);
-         g.drawImage(tanq3.getImagen(), (int)tanq3.getX(), (int)tanq3.getY(),anchoPanel, altoPanel,this);
-         g.drawImage(tanq4.getImagen(), (int)tanq4.getX(), (int)tanq4.getY(),anchoPanel, altoPanel,this);
-         g.drawImage(tanq5.getImagen(), (int)tanq5.getX(), (int)tanq5.getY(),anchoPanel, altoPanel,this);
+//         g.drawImage(tanqJug.getImagen(), (int)tanqJug.getX(), (int)tanqJug.getY(),anchoPanel, altoPanel,this);
+//         g.drawImage(tanq1.getImagen(), (int)tanq1.getX(), (int)tanq1.getY(),anchoPanel, altoPanel,this);
+//         g.drawImage(tanq2.getImagen(), (int)tanq2.getX(), (int)tanq2.getY(),anchoPanel, altoPanel,this);
+//         g.drawImage(tanq3.getImagen(), (int)tanq3.getX(), (int)tanq3.getY(),anchoPanel, altoPanel,this);
+//         g.drawImage(tanq4.getImagen(), (int)tanq4.getX(), (int)tanq4.getY(),anchoPanel, altoPanel,this);
+//         g.drawImage(tanq5.getImagen(), (int)tanq5.getX(), (int)tanq5.getY(),anchoPanel, altoPanel,this);
     } 
-    
-    
+    public void update(Graphics g){
+        paint(g);
+    }
     @Override
     public void run() {
         while(true){
             try{
                 if(!tanqJug.balas.isEmpty()){
                     tanqJug.cicloBala();
+                }
+                for(int i = 0; i < enemigos.size(); i++){
+                    TanqueEnemigo te = (TanqueEnemigo)enemigos.get(i);
+                    te.ciclo();
+                    
+//                    if(rect.getY() > 525){
+//                    int rango = Aleatorio(800,50);
+//                    rect.setY(0);
+//                    rect.setX(rango);
+                    //}
                 }
                 Thread.sleep(80);
             }catch(InterruptedException err){
