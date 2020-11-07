@@ -115,7 +115,7 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
                 System.out.println(err);
             }
             
-            repaint();
+            this.repaint();
         }
     }
 
@@ -129,24 +129,23 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
         int y = (int) tanqJug.getY();
         
         if(tecla == KeyEvent.VK_LEFT){
-            TanqueJugador tanq = tanqJug;
-            tanq.mover(movIzq);
-            this.tanqJug = tanq;
+            this.tanqJug.mover(movIzq); 
         }
         if(tecla == KeyEvent.VK_RIGHT){
-            
+            this.tanqJug.mover(movDer);
         }
         if(tecla == KeyEvent.VK_UP){
-            
+            this.tanqJug.mover(movArriba);
         }
         if(tecla == KeyEvent.VK_DOWN){
-            
+            this.tanqJug.mover(movAbajo);
         }
         if(tecla == KeyEvent.VK_Q){
             BalaGrafica bala = tanqJug.Bala();
             tanqJug.balas.add(bala);
             array.add(bala);
         }
+        repaint();
     }
 
     @Override

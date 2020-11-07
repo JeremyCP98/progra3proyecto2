@@ -67,8 +67,8 @@ public class TanqueJugador extends Coordenada {
     }
     
     public void mover(Coordenada nva){
-        cor1.setX(this.Suma(nva).getX());
-        cor1.setY(this.Suma(nva).getY());
+        setX(this.Suma(nva).getX());
+        setY(this.Suma(nva).getY());
     }
 }
 
