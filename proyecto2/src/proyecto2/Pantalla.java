@@ -61,6 +61,19 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
     this.addKeyListener(this);
     setFocusable(true);
     
+    tanq1.setY(0);
+    tanq1.setX(550);
+    tanq2.setY(0);
+    tanq2.setX(200);
+    tanq3.setY(0);
+    tanq3.setX(900);
+    tanq4.setY(150);
+    tanq4.setX(350);
+    tanq5.setY(150);
+    tanq5.setX(750);
+    
+    tanqJug.setY(859);
+    tanqJug.setX(550);
     
     }
     @Override
@@ -74,25 +87,15 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
 //        int yNave2 = yNave1 + altoPanel;
 //        int yNave3 = yNave2 + altoPanel; 
        
-        tanq1.setY(0);
-        tanq1.setX(550);
-        tanq2.setY(0);
-        tanq2.setX(200);
-        tanq3.setY(0);
-        tanq3.setX(900);
-        tanq4.setY(150);
-        tanq4.setX(350);
-        tanq5.setY(150);
-        tanq5.setX(750);
-        /*nave2.setY(yNave2);
+        
+        /*nave2.setY(yNave2); 590.0 - 659.0
         nave3.setY(yNave3);
         
         g.drawImage(tanq.getImagen(), tanq.getX(), tanq.getY(),anchoPanel, altoPanel,this);
         g.drawImage(nave2.getImagen(), nave2.getX(), nave2.getY(),anchoPanel, altoPanel,this);
         g.drawImage(nave3.getImagen(), nave3.getX(), nave3.getY(),anchoPanel, altoPanel,this);*/
         
-        tanqJug.setY(859);
-        tanqJug.setX(550);
+        
         
          g.drawImage(tanqJug.getImagen(), (int)tanqJug.getX(), (int)tanqJug.getY(),anchoPanel, altoPanel,this);
          g.drawImage(tanq1.getImagen(), (int)tanq1.getX(), (int)tanq1.getY(),anchoPanel, altoPanel,this);
@@ -125,32 +128,55 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
     @Override
     public void keyPressed(KeyEvent ke) {
         int tecla = ke.getKeyCode();
-        int x = (int) tanqJug.getX();
-        int y = (int) tanqJug.getY();
         
         if(tecla == KeyEvent.VK_LEFT){
-            this.tanqJug.mover(movIzq); 
+            if(tanqJug.getX() > 0)
+            {
+                this.tanqJug.mover(movIzq);
+            }
         }
         if(tecla == KeyEvent.VK_RIGHT){
-            this.tanqJug.mover(movDer);
+            if(tanqJug.getX() < 1100)
+            {
+                this.tanqJug.mover(movDer);
+            }
         }
         if(tecla == KeyEvent.VK_UP){
-            this.tanqJug.mover(movArriba);
+            if(tanqJug.getY() > 10)
+            {
+                this.tanqJug.mover(movArriba);
+            }
         }
         if(tecla == KeyEvent.VK_DOWN){
-            this.tanqJug.mover(movAbajo);
+            if(tanqJug.getY() < 850)
+            {
+                this.tanqJug.mover(movAbajo);
+            }
         }
         if(tecla == KeyEvent.VK_Q){
             BalaGrafica bala = tanqJug.Bala();
             tanqJug.balas.add(bala);
             array.add(bala);
         }
-        repaint();
+        //repaint();
     }
 
     @Override
     public void keyReleased(KeyEvent ke) {
-            
+        int tecla = ke.getKeyCode();
+        
+        if(tecla == KeyEvent.VK_LEFT){
+            this.tanqJug.mover(movNulo);
+        }
+        if(tecla == KeyEvent.VK_RIGHT){
+            this.tanqJug.mover(movNulo);
+        }
+        if(tecla == KeyEvent.VK_UP){
+            this.tanqJug.mover(movNulo);
+        }
+        if(tecla == KeyEvent.VK_DOWN){
+            this.tanqJug.mover(movNulo);
+        }
     }
     
 }

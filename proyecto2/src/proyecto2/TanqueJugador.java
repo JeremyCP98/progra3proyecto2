@@ -20,7 +20,7 @@ public class TanqueJugador extends Coordenada {
     
     private ImageIcon ii;
     private Image imagen;
-    
+    String ruta;
     public Coordenada cor1 = new Coordenada();
     
     ArrayList balas = new ArrayList();
@@ -32,16 +32,16 @@ public class TanqueJugador extends Coordenada {
         
     }
     public TanqueJugador(Coordenada a, String ruta){
-    
+        this.ruta = ruta;
         //super(a.getX(),a.getY());
-        ii = new ImageIcon(this.getClass().getResource(ruta));
+        ii = new ImageIcon(this.getClass().getResource(this.ruta));
         this.cor1.setX(a.getX());
         this.cor1.setY(a.getY());
         imagen = ii.getImage();
         
     }   
     public TanqueJugador(TanqueJugador nav){
-        String ruta;
+        
         //super(nav.getX(),nav.getY());
         this.cor1.setX(nav.getX());
         this.cor1.setY(nav.getY());
@@ -50,9 +50,18 @@ public class TanqueJugador extends Coordenada {
     public Image getImagen() {
         return imagen;
     }
+
+    public void setCor1(Coordenada cor1) {
+        this.cor1 = cor1;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
     
-    public BalaGrafica Bala(){
-        Coordenada salida = new Coordenada(this.cor1.getX()+50,this.cor1.getY()+50);
+    public BalaGrafica Bala(){ // 590.0 - 659.0
+        Coordenada salida = new Coordenada(this.getX() + 40,this.getY() - 200);
+        System.out.println(salida.getX() + " - " + salida.getY());
         BalaGrafica bala = new BalaGrafica(salida, 10, Color.red);
         
         return bala;
