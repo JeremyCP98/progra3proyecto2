@@ -5,9 +5,12 @@
  */
 package proyecto2;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.Timer;
 
 /**
  *
@@ -20,6 +23,8 @@ public class TanqueEnemigo extends Coordenada implements Runnable, Dibujable{
     private Thread hiloTanque;
     
     public Coordenada cor1 = new Coordenada();
+    ArrayList balas = new ArrayList();
+
 
     
      public TanqueEnemigo(){
@@ -70,5 +75,26 @@ public class TanqueEnemigo extends Coordenada implements Runnable, Dibujable{
         float x = this.getX();
         if(x < 1100)this.setX(x += 5);
         else this.setX(0);
+    }
+    
+        public BalaGrafica Bala(){ // 590.0 - 659.0
+        Coordenada salida = new Coordenada(this.getX() + 63,this.getY()+150);
+        System.out.println(salida.getX() + " - " + salida.getY());
+        BalaGrafica bala = new BalaGrafica(salida, 10, Color.black);
+        
+        return bala;
+    }
+    
+    public void cicloBala(){
+        Timer tm;
+        
+       // tm = new Timer(10);
+        for(int i = 0; i < this.balas.size(); i++){
+            BalaGrafica y = (BalaGrafica)this.balas.get(i);
+            float x = y.getY();
+            y.setY(x += 30);
+           
+       }
+       
     }
 }
