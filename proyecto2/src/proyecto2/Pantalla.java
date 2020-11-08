@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JPanel;
 
 /**
@@ -86,6 +87,11 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
     tanqJug.setY(859);
     tanqJug.setX(550);
     
+    
+   /* BalaGrafica bala = tanq1.Bala();
+    tanq1.balas.add(bala);
+    array.add(bala);*/
+    
     }
     //@Override
     public void paint(Graphics g){
@@ -131,20 +137,28 @@ public class Pantalla extends JPanel implements Runnable, KeyListener {
     @Override
     public void run() {
         while(true){
+            
             try{
+
                 if(!tanqJug.balas.isEmpty()){
                     tanqJug.cicloBala();
                 }
+
                 for(int i = 0; i < enemigos.size(); i++){
                     TanqueEnemigo te = (TanqueEnemigo)enemigos.get(i);
                     te.ciclo();
-                    
-//                    if(rect.getY() > 525){
-//                    int rango = Aleatorio(800,50);
-//                    rect.setY(0);
-//                    rect.setX(rango);
-                    //}
+                    Random rn = new Random();
+                    int answer = rn.nextInt(20) + 1;
+                    if(answer == 3){
+                        BalaGrafica bala = te.Bala();
+                        te.balas.add(bala);
+                        array.add(bala);
+                    }
+                    if(!te.balas.isEmpty()){
+                    te.cicloBala();
+                    }
                 }
+                
                 Thread.sleep(80);
             }catch(InterruptedException err){
                 System.out.println(err);
