@@ -6,6 +6,7 @@
 package proyecto2;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import javax.swing.JFrame;
 
 /**
@@ -19,14 +20,16 @@ public class Proyecto2 {
      */
     public static void main(String[] args) {
                 //Creación de la ventana e implementación del panel par
-        JFrame ventana = new JFrame("Guerra de Tanques");
-        ventana.setSize(1224, 1000);
-        ventana.setLocationRelativeTo(null);
-        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ventana.getContentPane().add(new Pantalla(), BorderLayout.CENTER);
-        ventana.setVisible(true);
-        Pantalla pantalla = new Pantalla();
-        pantalla.run();
+        //JFrame ventana = new JFrame("Guerra de Tanques");
+//        ventana.setSize(1524, 1000);
+//        ventana.setLocationRelativeTo(null);
+//        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        ventana.getContentPane().add(new Pantalla(), BorderLayout.CENTER);
+//        ventana.setVisible(true);
+//        ventana.setBackground(Color.white);
+        //Pantalla pantalla = new Pantalla();
+        VistaMenu vMenu = new VistaMenu();
+        vMenu.inciar();
     }
     
 }

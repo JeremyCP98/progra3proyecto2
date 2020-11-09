@@ -5,6 +5,8 @@
  */
 package proyecto2;
 
+import javax.swing.JButton;
+
 /**
  *
  * @author vtrej
@@ -31,11 +33,11 @@ public class Instrucciones extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        iniciaPartidaBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        volverBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,11 +49,11 @@ public class Instrucciones extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proyecto2/tanqueJugador.png"))); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Iniciar Partida");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        iniciaPartidaBtn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        iniciaPartidaBtn.setText("Iniciar Partida");
+        iniciaPartidaBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                iniciaPartidaBtnActionPerformed(evt);
             }
         });
 
@@ -64,8 +66,8 @@ public class Instrucciones extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("<html>\nPara ganar debe derribar todos los tanques enemigos por medio de las balas. \n<br>\nPor cada tanque derrotado suma dos puntos a su puntaje final\n");
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton2.setText("Volver");
+        volverBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        volverBtn.setText("Volver");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -87,14 +89,14 @@ public class Instrucciones extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2))
+                        .addComponent(volverBtn))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(55, 55, 55)
                         .addComponent(jLabel3)
                         .addGap(97, 97, 97)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jButton1))
+                            .addComponent(iniciaPartidaBtn))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4)))
                 .addGap(43, 43, 43))
@@ -112,7 +114,7 @@ public class Instrucciones extends javax.swing.JFrame {
                         .addGap(23, 23, 23)
                         .addComponent(jLabel1)
                         .addGap(61, 61, 61)
-                        .addComponent(jButton1)))
+                        .addComponent(iniciaPartidaBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -120,7 +122,7 @@ public class Instrucciones extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(volverBtn)
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
@@ -140,9 +142,9 @@ public class Instrucciones extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void iniciaPartidaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciaPartidaBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_iniciaPartidaBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -179,9 +181,29 @@ public class Instrucciones extends javax.swing.JFrame {
         });
     }
 
+    public JButton getIniciaPartidaBtn() {
+        return iniciaPartidaBtn;
+    }
+
+    public void setIniciaPartidaBtn(JButton iniciaPartidaBtn) {
+        this.iniciaPartidaBtn = iniciaPartidaBtn;
+    }
+
+    public JButton getVolverBtn() {
+        return volverBtn;
+    }
+
+    public void setVolverBtn(JButton volverBtn) {
+        this.volverBtn = volverBtn;
+    }
+    
+    public void inciar(){
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton iniciaPartidaBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -189,5 +211,6 @@ public class Instrucciones extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton volverBtn;
     // End of variables declaration//GEN-END:variables
 }
