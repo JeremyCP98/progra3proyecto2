@@ -16,39 +16,39 @@ import javax.swing.ImageIcon;
  *
  * @author vtrej
  */
+public class TanqueJugador extends Coordenada implements Dibujable {
 
-    
-public class TanqueJugador extends Coordenada implements Dibujable{
-    
     private ImageIcon ii;
     private Image imagen;
     String ruta;
     public Coordenada cor1 = new Coordenada();
-    
+    String nombre;
     ArrayList balas = new ArrayList();
-    
-    public TanqueJugador(){
+
+    public TanqueJugador() {
         super();
         this.cor1.setX(0);
         this.cor1.setY(0);
-        
+        nombre = "";
     }
-    public TanqueJugador(Coordenada a, String ruta){
+
+    public TanqueJugador(Coordenada a, String ruta) {
         this.ruta = ruta;
         //super(a.getX(),a.getY());
         ii = new ImageIcon(this.getClass().getResource(this.ruta));
         this.cor1.setX(a.getX());
         this.cor1.setY(a.getY());
         imagen = ii.getImage();
-        
-    }   
-    public TanqueJugador(TanqueJugador nav){
-        
+    }
+
+    public TanqueJugador(TanqueJugador nav) {
+
         //super(nav.getX(),nav.getY());
         this.cor1.setX(nav.getX());
         this.cor1.setY(nav.getY());
         ruta = nav.imagen.getSource().toString();
     }
+
     public Image getImagen() {
         return imagen;
     }
@@ -60,31 +60,38 @@ public class TanqueJugador extends Coordenada implements Dibujable{
     public String getRuta() {
         return ruta;
     }
-    
-    public BalaGrafica Bala(){ // 590.0 - 659.0
-        Coordenada salida = new Coordenada(this.getX() + 63,this.getY());
+
+    public BalaGrafica Bala() { // 590.0 - 659.0
+        Coordenada salida = new Coordenada(this.getX() + 63, this.getY());
         System.out.println(salida.getX() + " - " + salida.getY());
         BalaGrafica bala = new BalaGrafica(salida, 10, Color.red);
-        
+
         return bala;
     }
-    
-    public void cicloBala(){
-        for(int i = 0; i < this.balas.size(); i++){
-            BalaGrafica y = (BalaGrafica)this.balas.get(i);
+
+    public void cicloBala() {
+        for (int i = 0; i < this.balas.size(); i++) {
+            BalaGrafica y = (BalaGrafica) this.balas.get(i);
             float x = y.getY();
             y.setY(x -= 20);
         }
     }
-    
-    public void mover(Coordenada nva){
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void mover(Coordenada nva) {
         setX(this.Suma(nva).getX());
         setY(this.Suma(nva).getY());
     }
 
     @Override
     public void dibujar(Graphics dv) {
-        dv.drawImage(getImagen(), (int)getX(), (int)getY(), null);
+        dv.drawImage(getImagen(), (int) getX(), (int) getY(), null);
     }
 }
-

@@ -77,5 +77,13 @@ public class PantallaDatos implements Dibujable {
     public void setColor(Color col) {
         this.color = col;
     }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
     
 }

@@ -15,6 +15,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import static java.lang.System.exit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
@@ -29,6 +32,7 @@ import proyecto2.VistaMenu;
  * @author vtrej
  */
 public class Pantalla extends JPanel implements Runnable, KeyListener, ActionListener {
+
     ArrayList array = new ArrayList();
     private TanqueEnemigo tanq1 = null;
     private TanqueEnemigo tanq2 = null;
@@ -37,159 +41,182 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
     private TanqueEnemigo tanq5 = null;
     private TanqueEnemigo tanq6 = null;
     private TanqueEnemigo explosion = null;
-    private TanqueJugador tanqJug  = null;
-    
+    private TanqueJugador tanqJug = null;
+
     private Instrucciones inst;
     private VistaLogin vLogin;
     private VistaMenu vMenu;
-    
+
     ArrayList enemigos = new ArrayList();
     String ruta;
     String ruta2;
     String ruta3;
-    
+
     private Thread hiloControl;
-    Coordenada a = new Coordenada(0,0);
-    Coordenada b = new Coordenada(0,0);
-    
-    Coordenada movIzq = new Coordenada(-15,0);
-    Coordenada movDer = new Coordenada(15,0);
-    Coordenada movArriba = new Coordenada(0,-15);
-    Coordenada movAbajo = new Coordenada(0,15);
-    Coordenada movNulo = new Coordenada(0,0);
-    
+    Coordenada a = new Coordenada(0, 0);
+    Coordenada b = new Coordenada(0, 0);
+
+    Coordenada movIzq = new Coordenada(-15, 0);
+    Coordenada movDer = new Coordenada(15, 0);
+    Coordenada movArriba = new Coordenada(0, -15);
+    Coordenada movAbajo = new Coordenada(0, 15);
+    Coordenada movNulo = new Coordenada(0, 0);
+
     int contTanq = 6;
-    
+
     int score;
     int cantVidas = 5;
     PantallaDatos puntos = new PantallaDatos();
     PantallaDatos vidas = new PantallaDatos();
     Boolean termina = true;
-    
+    String nombJug;
     JFrame ventana = new JFrame("Guerra de Tanques");
-    
-    public Pantalla(Instrucciones i, VistaLogin vl, VistaMenu vm){
-    this.inst = i;
-    this.vMenu = vm;
-    this.vLogin = vl;
-    
-    this.inst.getVolverBtn().addActionListener(this);
-    this.inst.getIniciaPartidaBtn().addActionListener(this);
-    this.vLogin.getInicioPartida().addActionListener(this);
-    this.vMenu.getInstrucciones().addActionListener(this);
-    this.vMenu.getNuevaPartida().addActionListener(this);
-    
-    }
-    
-    public Pantalla(){
-    
-    ruta = "tanqueEnemigo.png" ;
-    ruta2 = "tanqueJugador.png";
-    ruta3  = "explosion.gif";
-    tanq1 = new TanqueEnemigo(a,ruta);
-    tanq2 = new TanqueEnemigo(a,ruta);
-    tanq3 = new TanqueEnemigo(a,ruta);
-    tanq4 = new TanqueEnemigo(a,ruta);
-    tanq5 = new TanqueEnemigo(a,ruta);
-    tanq6 = new TanqueEnemigo(a,ruta);
-    explosion = new TanqueEnemigo(a,ruta3);
-    tanqJug = new TanqueJugador(b,ruta2);
-    hiloControl = new Thread(this);//Se crea el hilo
-    hiloControl.start(); //se inicia
-    array.add(tanq1);
-    array.add(tanq2);
-    array.add(tanq3);
-    array.add(tanq4);
-    array.add(tanq5);
-    array.add(tanq6);
-    //array.add(explosion);
-    array.add(tanqJug);
-    
-    enemigos.add(tanq1);
-    enemigos.add(tanq2);
-    enemigos.add(tanq3);
-    enemigos.add(tanq4);
-    enemigos.add(tanq5);
-    enemigos.add(tanq6);
-    this.addKeyListener(this);
-    setFocusable(true);
-    
-    tanq1.setY(0);
-    tanq1.setX(550);
-    tanq2.setY(0);
-    tanq2.setX(200);
-    tanq3.setY(0);
-    tanq3.setX(900);
-    tanq4.setY(150);
-    tanq4.setX(350);
-    tanq5.setY(150);
-    tanq5.setX(750);
-    tanq6.setY(150);
-    tanq6.setX(25);
-    tanqJug.setY(800);
-    tanqJug.setX(550);
-    
-    PantallaDatos vidasTxt = new PantallaDatos("Vidas",Color.black,2700,50);
-    vidasTxt.setSize(35);
-    array.add(vidasTxt);
-    PantallaDatos score = new PantallaDatos("Puntos",Color.black,2700,250);
-    score.setSize(35);
-    array.add(score);
 
-    puntos = new PantallaDatos("0",Color.red,2700,350);
-    puntos.setSize(40);
-    array.add(puntos);
+    Jugador jg = new Jugador();
+    
+    public Pantalla(Instrucciones i, VistaLogin vl, VistaMenu vm) {
+        this.inst = i;
+        this.vMenu = vm;
+        this.vLogin = vl;
 
-    vidas = new PantallaDatos(""+cantVidas,Color.red,2700,150);
-    vidas.setSize(40);
-    array.add(vidas);
-    
-    Jugador jg = new Jugador("", 0);
-    
-    PantallaDatos nombreJug = new PantallaDatos(jg.getNombre(),Color.black,2700,450);
-    nombreJug.setSize(50);
-    array.add(nombreJug);
-    
-    
-    
+        this.inst.getVolverBtn().addActionListener(this);
+        this.inst.getIniciaPartidaBtn().addActionListener(this);
+        this.vLogin.getInicioPartida().addActionListener(this);
+        this.vMenu.getInstrucciones().addActionListener(this);
+        this.vMenu.getNuevaPartida().addActionListener(this);
+
     }
-    
-    public void paint(Graphics g){
+
+    public Pantalla() {
         
+        ruta = "tanqueEnemigo.png";
+        ruta2 = "tanqueJugador.png";
+        ruta3 = "explosion.gif";
+        tanq1 = new TanqueEnemigo(a, ruta);
+        tanq2 = new TanqueEnemigo(a, ruta);
+        tanq3 = new TanqueEnemigo(a, ruta);
+        tanq4 = new TanqueEnemigo(a, ruta);
+        tanq5 = new TanqueEnemigo(a, ruta);
+        tanq6 = new TanqueEnemigo(a, ruta);
+        explosion = new TanqueEnemigo(a, ruta3);
+        tanqJug = new TanqueJugador(b, ruta2);
+        hiloControl = new Thread(this);//Se crea el hilo
+        hiloControl.start(); //se inicia
+        array.add(tanq1);
+        array.add(tanq2);
+        array.add(tanq3);
+        array.add(tanq4);
+        array.add(tanq5);
+        array.add(tanq6);
+        //array.add(explosion);
+        array.add(tanqJug);
+
+        enemigos.add(tanq1);
+        enemigos.add(tanq2);
+        enemigos.add(tanq3);
+        enemigos.add(tanq4);
+        enemigos.add(tanq5);
+        enemigos.add(tanq6);
+        this.addKeyListener(this);
+        setFocusable(true);
+
+        tanq1.setY(0);
+        tanq1.setX(550);
+        tanq2.setY(0);
+        tanq2.setX(200);
+        tanq3.setY(0);
+        tanq3.setX(900);
+        tanq4.setY(150);
+        tanq4.setX(350);
+        tanq5.setY(150);
+        tanq5.setX(750);
+        tanq6.setY(150);
+        tanq6.setX(25);
+        tanqJug.setY(800);
+        tanqJug.setX(550);
+
+        PantallaDatos vidasTxt = new PantallaDatos("Vidas", Color.black, 2700, 50);
+        vidasTxt.setSize(35);
+        array.add(vidasTxt);
+        PantallaDatos score = new PantallaDatos("Puntos", Color.black, 2700, 250);
+        score.setSize(35);
+        array.add(score);
+
+        puntos = new PantallaDatos("0", Color.red, 2700, 350);
+        puntos.setSize(40);
+        array.add(puntos);
+
+        vidas = new PantallaDatos("" + cantVidas, Color.red, 2700, 150);
+        vidas.setSize(40);
+        array.add(vidas);
+
+        PantallaDatos nombreJug = new PantallaDatos(jg.getNombre(), Color.black, 2700, 450);
+        nombreJug.setSize(50);
+        array.add(nombreJug);
+        
+    }
+
+    public void paint(Graphics g) {
+
         //super.paintComponent(g); //Permite la funcionalidad básica para dibujar el panel
 //        int anchoPanel = this.getWidth() / 10;
 //        int altoPanel = this.getHeight() / 10;
-        
         Dimension d = getSize();
-        Image Imagen = createImage(d.width,d.height);
+        Image Imagen = createImage(d.width, d.height);
         Graphics buff = Imagen.getGraphics();
         Dibujable div;
-        for(int i = 0; i < array.size(); i++)
-        {
-            div =  (Dibujable) array.get(i);
+        for (int i = 0; i < array.size(); i++) {
+            div = (Dibujable) array.get(i);
             div.dibujar(buff);
         }
         g.drawImage(Imagen, 0, 0, null);
-    } 
-    public void update(Graphics g){
+    }
+
+    public void update(Graphics g) {
         paint(g);
     }
-    
-    void colision(){
-        for(int i = 0; i < tanqJug.balas.size(); i++){
+
+    void guardarJugador() {
+        jg.setPuntaje(score);
+//        System.out.println("guarda : " +nombJug);
+//        jg.setNombre(nombJug);
+        PreparedStatement ps = null;
+        try {
+            //ResultSet rs = null;
+            Conexion conex = new Conexion();
+            Connection con = conex.getConnection();
+            
+            ps = con.prepareStatement("INSERT INTO puntuaciones (idUsuario, puntuaciones) VALUES (?,?)");
+            
+            ps.setString(1, jg.getNombre());
+            ps.setInt(2, jg.getPuntaje());
+
+            //rs= ps.executeQuery();
+            ps.execute();
+
+            JOptionPane.showMessageDialog(null, "usuario agregado exitosamente");
+        } catch (Exception ex) {
+
+            JOptionPane.showMessageDialog(null, "Error al guardar producto");
+            System.out.println(ex);
+        }
+    }
+
+    void colision() {
+        for (int i = 0; i < tanqJug.balas.size(); i++) {
             BalaGrafica balaJug = (BalaGrafica) tanqJug.balas.get(i);
-            for(int j = 0; j < enemigos.size(); j++){
+            for (int j = 0; j < enemigos.size(); j++) {
                 TanqueEnemigo tEnemigo = (TanqueEnemigo) enemigos.get(j);
-                
-                Coordenada corBalaJug = new Coordenada(balaJug.getX(),balaJug.getY());
-                Coordenada derecha = new Coordenada(tEnemigo.getX()+100,tEnemigo.getY()+75);
-                Coordenada izquierda = new Coordenada(tEnemigo.getX(),tEnemigo.getY()+75);
-                Coordenada medio = new Coordenada(tEnemigo.getX()+50,tEnemigo.getY()+75);
-                
-                if(corBalaJug.getX() > izquierda.getX() && corBalaJug.getX() < derecha.getX() && corBalaJug.getY() < medio.getY() && corBalaJug.getY()+25 > medio.getY()){
-                    
+
+                Coordenada corBalaJug = new Coordenada(balaJug.getX(), balaJug.getY());
+                Coordenada derecha = new Coordenada(tEnemigo.getX() + 100, tEnemigo.getY() + 75);
+                Coordenada izquierda = new Coordenada(tEnemigo.getX(), tEnemigo.getY() + 75);
+                Coordenada medio = new Coordenada(tEnemigo.getX() + 50, tEnemigo.getY() + 75);
+
+                if (corBalaJug.getX() > izquierda.getX() && corBalaJug.getX() < derecha.getX() && corBalaJug.getY() < medio.getY() && corBalaJug.getY() + 25 > medio.getY()) {
+
                     array.add(explosion);
-                    explosion.setY(tEnemigo.getY()-50);
+                    explosion.setY(tEnemigo.getY() - 50);
                     explosion.setX(tEnemigo.getX());
                     tEnemigo.setY(1500);
                     balaJug.setY(1500);
@@ -197,9 +224,9 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                     tanqJug.balas.remove(balaJug);
                     enemigos.remove(tEnemigo);
                     contTanq--;
-                    score+=2;
+                    score += 2;
                     puntos.setColor(Color.white);
-                    String nuevoScore = ""+score;
+                    String nuevoScore = "" + score;
                     PantallaDatos nPuntos = new PantallaDatos(nuevoScore, Color.red, 2700, 350);
                     nPuntos.setSize(40);
                     puntos = nPuntos;
@@ -207,25 +234,25 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                 }
             }
         }
-        for(int i = 0; i < tanq1.balas.size(); i++){
+        for (int i = 0; i < tanq1.balas.size(); i++) {
             BalaGrafica balaEnemigo = (BalaGrafica) tanq1.balas.get(i);
-            
+
             TanqueJugador tJug = (TanqueJugador) tanqJug;
 
-            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(),balaEnemigo.getY());
-            Coordenada derecha = new Coordenada(tJug.getX()+125,tJug.getY()+25);
-            Coordenada izquierda = new Coordenada(tJug.getX(),tJug.getY()+25);
-            Coordenada medio = new Coordenada(tJug.getX()+50,tJug.getY()+25);
+            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(), balaEnemigo.getY());
+            Coordenada derecha = new Coordenada(tJug.getX() + 125, tJug.getY() + 25);
+            Coordenada izquierda = new Coordenada(tJug.getX(), tJug.getY() + 25);
+            Coordenada medio = new Coordenada(tJug.getX() + 50, tJug.getY() + 25);
 
-            if(corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY() > medio.getY()){
+            if (corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY() > medio.getY()) {
 
                 array.add(explosion);
-                explosion.setY(tJug.getY()-50);
-                explosion.setX(tJug.getX()-50);
+                explosion.setY(tJug.getY() - 50);
+                explosion.setX(tJug.getX() - 50);
                 balaEnemigo.setY(1500);
                 tanqJug.balas.remove(balaEnemigo);
                 cantVidas--;
-                String nuevaVida = ""+cantVidas;
+                String nuevaVida = "" + cantVidas;
                 vidas.setColor(Color.white);
                 PantallaDatos nVidas = new PantallaDatos(nuevaVida, Color.red, 2700, 150);
                 nVidas.setSize(40);
@@ -233,25 +260,25 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                 array.add(vidas);
             }
         }
-        for(int i = 0; i < tanq2.balas.size(); i++){
+        for (int i = 0; i < tanq2.balas.size(); i++) {
             BalaGrafica balaEnemigo = (BalaGrafica) tanq2.balas.get(i);
-            
+
             TanqueJugador tJug = (TanqueJugador) tanqJug;
 
-            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(),balaEnemigo.getY());
-            Coordenada derecha = new Coordenada(tJug.getX()+100,tJug.getY()+50);
-            Coordenada izquierda = new Coordenada(tJug.getX(),tJug.getY()+50);
-            Coordenada medio = new Coordenada(tJug.getX()+50,tJug.getY()+50);
+            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(), balaEnemigo.getY());
+            Coordenada derecha = new Coordenada(tJug.getX() + 100, tJug.getY() + 50);
+            Coordenada izquierda = new Coordenada(tJug.getX(), tJug.getY() + 50);
+            Coordenada medio = new Coordenada(tJug.getX() + 50, tJug.getY() + 50);
 
-            if(corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY()+25 > medio.getY()){
+            if (corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY() + 25 > medio.getY()) {
 
                 array.add(explosion);
-                explosion.setY(tJug.getY()-50);
-                explosion.setX(tJug.getX()-50);
+                explosion.setY(tJug.getY() - 50);
+                explosion.setX(tJug.getX() - 50);
                 balaEnemigo.setY(1500);
                 tanqJug.balas.remove(balaEnemigo);
                 cantVidas--;
-                String nuevaVida = ""+cantVidas;
+                String nuevaVida = "" + cantVidas;
                 vidas.setColor(Color.white);
                 PantallaDatos nVidas = new PantallaDatos(nuevaVida, Color.red, 2700, 150);
                 nVidas.setSize(40);
@@ -259,25 +286,25 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                 array.add(vidas);
             }
         }
-        for(int i = 0; i < tanq3.balas.size(); i++){
+        for (int i = 0; i < tanq3.balas.size(); i++) {
             BalaGrafica balaEnemigo = (BalaGrafica) tanq3.balas.get(i);
-            
+
             TanqueJugador tJug = (TanqueJugador) tanqJug;
 
-            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(),balaEnemigo.getY());
-            Coordenada derecha = new Coordenada(tJug.getX()+100,tJug.getY()+50);
-            Coordenada izquierda = new Coordenada(tJug.getX(),tJug.getY()+50);
-            Coordenada medio = new Coordenada(tJug.getX()+50,tJug.getY()+50);
+            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(), balaEnemigo.getY());
+            Coordenada derecha = new Coordenada(tJug.getX() + 100, tJug.getY() + 50);
+            Coordenada izquierda = new Coordenada(tJug.getX(), tJug.getY() + 50);
+            Coordenada medio = new Coordenada(tJug.getX() + 50, tJug.getY() + 50);
 
-            if(corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY()+25 > medio.getY()){
+            if (corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY() + 25 > medio.getY()) {
 
                 array.add(explosion);
-                explosion.setY(tJug.getY()-50);
-                explosion.setX(tJug.getX()-50);
+                explosion.setY(tJug.getY() - 50);
+                explosion.setX(tJug.getX() - 50);
                 balaEnemigo.setY(1500);
                 tanqJug.balas.remove(balaEnemigo);
                 cantVidas--;
-                String nuevaVida = ""+cantVidas;
+                String nuevaVida = "" + cantVidas;
                 vidas.setColor(Color.white);
                 PantallaDatos nVidas = new PantallaDatos(nuevaVida, Color.red, 2700, 150);
                 nVidas.setSize(40);
@@ -285,25 +312,25 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                 array.add(vidas);
             }
         }
-        for(int i = 0; i < tanq4.balas.size(); i++){
+        for (int i = 0; i < tanq4.balas.size(); i++) {
             BalaGrafica balaEnemigo = (BalaGrafica) tanq4.balas.get(i);
-            
+
             TanqueJugador tJug = (TanqueJugador) tanqJug;
 
-            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(),balaEnemigo.getY());
-            Coordenada derecha = new Coordenada(tJug.getX()+100,tJug.getY()+50);
-            Coordenada izquierda = new Coordenada(tJug.getX(),tJug.getY()+50);
-            Coordenada medio = new Coordenada(tJug.getX()+50,tJug.getY()+50);
+            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(), balaEnemigo.getY());
+            Coordenada derecha = new Coordenada(tJug.getX() + 100, tJug.getY() + 50);
+            Coordenada izquierda = new Coordenada(tJug.getX(), tJug.getY() + 50);
+            Coordenada medio = new Coordenada(tJug.getX() + 50, tJug.getY() + 50);
 
-            if(corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY()+25 > medio.getY()){
+            if (corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY() + 25 > medio.getY()) {
 
                 array.add(explosion);
-                explosion.setY(tJug.getY()-50);
-                explosion.setX(tJug.getX()-50);
+                explosion.setY(tJug.getY() - 50);
+                explosion.setX(tJug.getX() - 50);
                 balaEnemigo.setY(1500);
                 tanqJug.balas.remove(balaEnemigo);
                 cantVidas--;
-                String nuevaVida = ""+cantVidas;
+                String nuevaVida = "" + cantVidas;
                 vidas.setColor(Color.white);
                 PantallaDatos nVidas = new PantallaDatos(nuevaVida, Color.red, 2700, 150);
                 nVidas.setSize(40);
@@ -311,25 +338,25 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                 array.add(vidas);
             }
         }
-        for(int i = 0; i < tanq5.balas.size(); i++){
+        for (int i = 0; i < tanq5.balas.size(); i++) {
             BalaGrafica balaEnemigo = (BalaGrafica) tanq5.balas.get(i);
-            
+
             TanqueJugador tJug = (TanqueJugador) tanqJug;
 
-            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(),balaEnemigo.getY());
-            Coordenada derecha = new Coordenada(tJug.getX()+100,tJug.getY()+50);
-            Coordenada izquierda = new Coordenada(tJug.getX(),tJug.getY()+50);
-            Coordenada medio = new Coordenada(tJug.getX()+50,tJug.getY()+50);
+            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(), balaEnemigo.getY());
+            Coordenada derecha = new Coordenada(tJug.getX() + 100, tJug.getY() + 50);
+            Coordenada izquierda = new Coordenada(tJug.getX(), tJug.getY() + 50);
+            Coordenada medio = new Coordenada(tJug.getX() + 50, tJug.getY() + 50);
 
-            if(corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY()+25 > medio.getY()){
+            if (corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY() + 25 > medio.getY()) {
 
                 array.add(explosion);
-                explosion.setY(tJug.getY()-50);
-                explosion.setX(tJug.getX()-50);
+                explosion.setY(tJug.getY() - 50);
+                explosion.setX(tJug.getX() - 50);
                 balaEnemigo.setY(1500);
                 tanqJug.balas.remove(balaEnemigo);
                 cantVidas--;
-                String nuevaVida = ""+cantVidas;
+                String nuevaVida = "" + cantVidas;
                 vidas.setColor(Color.white);
                 PantallaDatos nVidas = new PantallaDatos(nuevaVida, Color.red, 2700, 150);
                 nVidas.setSize(40);
@@ -337,25 +364,25 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                 array.add(vidas);
             }
         }
-        for(int i = 0; i < tanq6.balas.size(); i++){
+        for (int i = 0; i < tanq6.balas.size(); i++) {
             BalaGrafica balaEnemigo = (BalaGrafica) tanq6.balas.get(i);
-            
+
             TanqueJugador tJug = (TanqueJugador) tanqJug;
 
-            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(),balaEnemigo.getY());
-            Coordenada derecha = new Coordenada(tJug.getX()+100,tJug.getY()+50);
-            Coordenada izquierda = new Coordenada(tJug.getX(),tJug.getY()+50);
-            Coordenada medio = new Coordenada(tJug.getX()+50,tJug.getY()+50);
+            Coordenada corBalaEnemiga = new Coordenada(balaEnemigo.getX(), balaEnemigo.getY());
+            Coordenada derecha = new Coordenada(tJug.getX() + 100, tJug.getY() + 50);
+            Coordenada izquierda = new Coordenada(tJug.getX(), tJug.getY() + 50);
+            Coordenada medio = new Coordenada(tJug.getX() + 50, tJug.getY() + 50);
 
-            if(corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY()+25 > medio.getY()){
+            if (corBalaEnemiga.getX() > izquierda.getX() && corBalaEnemiga.getX() < derecha.getX() && corBalaEnemiga.getY() < medio.getY() && corBalaEnemiga.getY() + 25 > medio.getY()) {
 
                 array.add(explosion);
-                explosion.setY(tJug.getY()-50);
-                explosion.setX(tJug.getX()-50);
+                explosion.setY(tJug.getY() - 50);
+                explosion.setX(tJug.getX() - 50);
                 balaEnemigo.setY(1500);
                 tanqJug.balas.remove(balaEnemigo);
                 cantVidas--;
-                String nuevaVida = ""+cantVidas;
+                String nuevaVida = "" + cantVidas;
                 vidas.setColor(Color.white);
                 PantallaDatos nVidas = new PantallaDatos(nuevaVida, Color.red, 2700, 150);
                 nVidas.setSize(40);
@@ -364,86 +391,85 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
             }
         }
     }
-    
+
     @Override
     public void run() {
-        while(termina){
-            
-            try{
+        while (termina) {
 
-                if(!tanqJug.balas.isEmpty()){
+            try {
+
+                if (!tanqJug.balas.isEmpty()) {
                     tanqJug.cicloBala();
                 }
 
-                for(int i = 0; i < enemigos.size(); i++){
-                    TanqueEnemigo te = (TanqueEnemigo)enemigos.get(i);
+                for (int i = 0; i < enemigos.size(); i++) {
+                    TanqueEnemigo te = (TanqueEnemigo) enemigos.get(i);
                     te.ciclo();
                     Random rn = new Random();
                     int answer = rn.nextInt(30) + 1;
-                    if(answer == 3){
+                    if (answer == 3) {
                         BalaGrafica bala = te.Bala();
                         te.balas.add(bala);
                         array.add(bala);
                     }
-                    if(!te.balas.isEmpty()){
+                    if (!te.balas.isEmpty()) {
                         te.cicloBala();
                     }
                 }
-                if(cantVidas == 0){
+                if (cantVidas == 0) {
                     termina = false;
                     JOptionPane.showMessageDialog(null, "HAS PERDIDO");
                 }
-                if(contTanq == 0){
+                if (contTanq == 0) {
                     termina = false;
+                    //jg.setPuntaje(score);
+                    guardarJugador();
+
                     JOptionPane.showMessageDialog(null, "HAS GANADO");
                 }
-                colision();
                 
-//                if(contTanq > 0 && cantVidas > 0){
-//                    colision();
-//                }
+                colision();
+
                 Thread.sleep(80);
-            }catch(InterruptedException err){
+            } catch (InterruptedException err) {
                 System.out.println(err);
             }
-            
+
             this.repaint();
         }
+
         exit(0);
     }
-    
+
     @Override
-    public void keyTyped(KeyEvent ke) {}
+    public void keyTyped(KeyEvent ke) {
+    }
 
     @Override
     public void keyPressed(KeyEvent ke) {
         int tecla = ke.getKeyCode();
-        
-        if(tecla == KeyEvent.VK_LEFT){
-            if(tanqJug.getX() > 0)
-            {
+
+        if (tecla == KeyEvent.VK_LEFT) {
+            if (tanqJug.getX() > 0) {
                 this.tanqJug.mover(movIzq);
             }
         }
-        if(tecla == KeyEvent.VK_RIGHT){
-            if(tanqJug.getX() < 1100)
-            {
+        if (tecla == KeyEvent.VK_RIGHT) {
+            if (tanqJug.getX() < 1100) {
                 this.tanqJug.mover(movDer);
             }
         }
-        if(tecla == KeyEvent.VK_UP){
-            if(tanqJug.getY() > 10)
-            {
+        if (tecla == KeyEvent.VK_UP) {
+            if (tanqJug.getY() > 10) {
                 this.tanqJug.mover(movArriba);
             }
         }
-        if(tecla == KeyEvent.VK_DOWN){
-            if(tanqJug.getY() < 800)
-            {
+        if (tecla == KeyEvent.VK_DOWN) {
+            if (tanqJug.getY() < 800) {
                 this.tanqJug.mover(movAbajo);
             }
         }
-        if(tecla == KeyEvent.VK_Q){
+        if (tecla == KeyEvent.VK_Q) {
             BalaGrafica bala = tanqJug.Bala();
             tanqJug.balas.add(bala);
             array.add(bala);
@@ -453,29 +479,35 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
     @Override
     public void keyReleased(KeyEvent ke) {
         int tecla = ke.getKeyCode();
-        
-        if(tecla == KeyEvent.VK_LEFT){
+
+        if (tecla == KeyEvent.VK_LEFT) {
             this.tanqJug.mover(movNulo);
         }
-        if(tecla == KeyEvent.VK_RIGHT){
+        if (tecla == KeyEvent.VK_RIGHT) {
             this.tanqJug.mover(movNulo);
         }
-        if(tecla == KeyEvent.VK_UP){
+        if (tecla == KeyEvent.VK_UP) {
             this.tanqJug.mover(movNulo);
         }
-        if(tecla == KeyEvent.VK_DOWN){
+        if (tecla == KeyEvent.VK_DOWN) {
             this.tanqJug.mover(movNulo);
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if(ae.getSource().equals(inst.getVolverBtn())){
+        if (ae.getSource().equals(inst.getVolverBtn())) {
             inst.setVisible(false);
             vMenu.iniciar();
         }
-        if(ae.getSource().equals(inst.getIniciaPartidaBtn())){
+        if (ae.getSource().equals(inst.getIniciaPartidaBtn())) {
             inst.setVisible(false);
+            vLogin.iniciar();
+        }
+        if (ae.getSource().equals(vLogin.getInicioPartida())) {
+            jg.setNombre(vLogin.getNombreJugador().getText());
+            //nombJug=vLogin.getNombreJugador().getText();
+            vLogin.setVisible(false);
             ventana.setSize(1524, 1000);
             ventana.setLocationRelativeTo(null);
             ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -483,25 +515,15 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
             ventana.setVisible(true);
             ventana.setBackground(Color.white);
         }
-        if(ae.getSource().equals(vLogin.getInicioPartida())){
-            vLogin.setVisible(false);
-            
-            ventana.setSize(1524, 1000);
-            ventana.setLocationRelativeTo(null);
-            ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            ventana.getContentPane().add(new Pantalla(), BorderLayout.CENTER);
-            ventana.setVisible(true);
-            ventana.setBackground(Color.white);            
-        }
-        if(ae.getSource().equals(vMenu.getInstrucciones())){
+        if (ae.getSource().equals(vMenu.getInstrucciones())) {
             vMenu.setVisible(false);
             inst.iniciar();
         }
-        if(ae.getSource().equals(vMenu.getNuevaPartida())){
+        if (ae.getSource().equals(vMenu.getNuevaPartida())) {
             vMenu.setVisible(false);
             vLogin.iniciar();
         }
-        
+
     }
-    
+
 }
