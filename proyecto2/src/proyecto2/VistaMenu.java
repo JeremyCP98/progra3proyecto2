@@ -158,7 +158,7 @@ public class VistaMenu extends javax.swing.JFrame {
         this.nuevaPartida = nuevaPartida;
     }
     
-    public void inciar(){
+    public void iniciar(){
         setLocationRelativeTo(null);
         setVisible(true);
     }

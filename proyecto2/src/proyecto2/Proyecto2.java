@@ -19,17 +19,12 @@ public class Proyecto2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-                //Creación de la ventana e implementación del panel par
-        //JFrame ventana = new JFrame("Guerra de Tanques");
-//        ventana.setSize(1524, 1000);
-//        ventana.setLocationRelativeTo(null);
-//        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        ventana.getContentPane().add(new Pantalla(), BorderLayout.CENTER);
-//        ventana.setVisible(true);
-//        ventana.setBackground(Color.white);
-        //Pantalla pantalla = new Pantalla();
-        VistaMenu vMenu = new VistaMenu();
-        vMenu.inciar();
+        Instrucciones i = new Instrucciones();
+        VistaLogin vl = new VistaLogin();
+        VistaMenu vm = new VistaMenu();
+        Pantalla pantalla = new Pantalla(i,vl,vm);
+        vm.iniciar();
+        
     }
     
 }

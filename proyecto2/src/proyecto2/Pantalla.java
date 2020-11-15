@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import static java.lang.System.exit;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
@@ -65,10 +66,23 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
     PantallaDatos vidas = new PantallaDatos();
     Boolean termina = true;
     
+    JFrame ventana = new JFrame("Guerra de Tanques");
+    
     public Pantalla(Instrucciones i, VistaLogin vl, VistaMenu vm){
-    inst = i;
-    vMenu = vm;
-    vLogin = vl;
+    this.inst = i;
+    this.vMenu = vm;
+    this.vLogin = vl;
+    
+    this.inst.getVolverBtn().addActionListener(this);
+    this.inst.getIniciaPartidaBtn().addActionListener(this);
+    this.vLogin.getInicioPartida().addActionListener(this);
+    this.vMenu.getInstrucciones().addActionListener(this);
+    this.vMenu.getNuevaPartida().addActionListener(this);
+    
+    }
+    
+    public Pantalla(){
+    
     ruta = "tanqueEnemigo.png" ;
     ruta2 = "tanqueJugador.png";
     ruta3  = "explosion.gif";
@@ -136,17 +150,13 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
     nombreJug.setSize(50);
     array.add(nombreJug);
     
-    this.inst.getVolverBtn().addActionListener(this);
-    this.inst.getIniciaPartidaBtn().addActionListener(this);
-    this.vLogin.getInicioPartida().addActionListener(this);
-    this.vMenu.getInstrucciones().addActionListener(this);
-    this.vMenu.getNuevaPartida().addActionListener(this);
+    
     
     }
     
     public void paint(Graphics g){
         
-        super.paintComponent(g); //Permite la funcionalidad básica para dibujar el panel
+        //super.paintComponent(g); //Permite la funcionalidad básica para dibujar el panel
 //        int anchoPanel = this.getWidth() / 10;
 //        int altoPanel = this.getHeight() / 10;
         
@@ -376,7 +386,7 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                         array.add(bala);
                     }
                     if(!te.balas.isEmpty()){
-                    te.cicloBala();
+                        te.cicloBala();
                     }
                 }
                 if(cantVidas == 0){
@@ -389,6 +399,9 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                 }
                 colision();
                 
+//                if(contTanq > 0 && cantVidas > 0){
+//                    colision();
+//                }
                 Thread.sleep(80);
             }catch(InterruptedException err){
                 System.out.println(err);
@@ -396,8 +409,9 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
             
             this.repaint();
         }
+        exit(0);
     }
-
+    
     @Override
     public void keyTyped(KeyEvent ke) {}
 
@@ -458,31 +472,34 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
     public void actionPerformed(ActionEvent ae) {
         if(ae.getSource().equals(inst.getVolverBtn())){
             inst.setVisible(false);
-            vMenu.inciar();
+            vMenu.iniciar();
         }
-        if(ae.getSource().equals(vLogin.getInicioPartida())){
-            JFrame ventana = new JFrame("Guerra de Tanques");
-            Instrucciones i = new Instrucciones();
-            VistaLogin vl = new VistaLogin();
-            VistaMenu vm = new VistaMenu();
+        if(ae.getSource().equals(inst.getIniciaPartidaBtn())){
+            inst.setVisible(false);
             ventana.setSize(1524, 1000);
             ventana.setLocationRelativeTo(null);
             ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            ventana.getContentPane().add(new Pantalla(i,vl,vm), BorderLayout.CENTER);
+            ventana.getContentPane().add(new Pantalla(), BorderLayout.CENTER);
             ventana.setVisible(true);
             ventana.setBackground(Color.white);
+        }
+        if(ae.getSource().equals(vLogin.getInicioPartida())){
+            vLogin.setVisible(false);
             
-            
-            Pantalla pantalla = new Pantalla(i,vl,vm);
-            pantalla.run();
+            ventana.setSize(1524, 1000);
+            ventana.setLocationRelativeTo(null);
+            ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            ventana.getContentPane().add(new Pantalla(), BorderLayout.CENTER);
+            ventana.setVisible(true);
+            ventana.setBackground(Color.white);            
         }
         if(ae.getSource().equals(vMenu.getInstrucciones())){
             vMenu.setVisible(false);
-            inst.inciar();
+            inst.iniciar();
         }
         if(ae.getSource().equals(vMenu.getNuevaPartida())){
             vMenu.setVisible(false);
-            vLogin.inciar();
+            vLogin.iniciar();
         }
         
     }

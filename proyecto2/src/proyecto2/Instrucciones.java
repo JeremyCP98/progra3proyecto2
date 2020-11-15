@@ -197,7 +197,7 @@ public class Instrucciones extends javax.swing.JFrame {
         this.volverBtn = volverBtn;
     }
     
-    public void inciar(){
+    public void iniciar(){
         setLocationRelativeTo(null);
         setVisible(true);
     }

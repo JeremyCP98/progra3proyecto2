@@ -113,7 +113,27 @@ public class VistaLogin extends javax.swing.JFrame {
     private void nombreJugadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreJugadorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nombreJugadorActionPerformed
+    
+    public JButton getInicioPartida() {
+        return inicioPartida;
+    }
 
+    public void setInicioPartida(JButton inicioPartida) {
+        this.inicioPartida = inicioPartida;
+    }
+
+    public JTextField getNombreJugador() {
+        return nombreJugador;
+    }
+
+    public void setNombreJugador(JTextField nombreJugador) {
+        this.nombreJugador = nombreJugador;
+    }
+    
+    public void iniciar(){
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
     /**
      * @param args the command line arguments
      */
@@ -149,26 +169,7 @@ public class VistaLogin extends javax.swing.JFrame {
         });
     }
 
-    public JButton getInicioPartida() {
-        return inicioPartida;
-    }
-
-    public void setInicioPartida(JButton inicioPartida) {
-        this.inicioPartida = inicioPartida;
-    }
-
-    public JTextField getNombreJugador() {
-        return nombreJugador;
-    }
-
-    public void setNombreJugador(JTextField nombreJugador) {
-        this.nombreJugador = nombreJugador;
-    }
     
-    public void inciar(){
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton inicioPartida;
