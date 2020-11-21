@@ -108,7 +108,6 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
         array.add(tanq4);
         array.add(tanq5);
         array.add(tanq6);
-        //array.add(explosion);
         array.add(tanqJug);
 
         enemigos.add(tanq1);
@@ -157,10 +156,6 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
     }
 
     public void paint(Graphics g) {
-
-        //super.paintComponent(g); //Permite la funcionalidad básica para dibujar el panel
-//        int anchoPanel = this.getWidth() / 10;
-//        int altoPanel = this.getHeight() / 10;
         Dimension d = getSize();
         Image Imagen = createImage(d.width, d.height);
         Graphics buff = Imagen.getGraphics();
@@ -178,20 +173,17 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
 
     void guardarJugador() {
         jg.setPuntaje(score);
-//        System.out.println("guarda : " +nombJug);
-//        jg.setNombre(nombJug);
+        
         PreparedStatement ps = null;
         try {
-            //ResultSet rs = null;
             Conexion conex = new Conexion();
             Connection con = conex.getConnection();
             
             ps = con.prepareStatement("INSERT INTO puntuaciones (idUsuario, puntuaciones) VALUES (?,?)");
             
-            ps.setString(1, jg.getNombre());
+            ps.setString(1, "Jugador");
             ps.setInt(2, jg.getPuntaje());
 
-            //rs= ps.executeQuery();
             ps.execute();
 
             JOptionPane.showMessageDialog(null, "usuario agregado exitosamente");
@@ -418,13 +410,12 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                 }
                 if (cantVidas == 0) {
                     termina = false;
+                    guardarJugador();
                     JOptionPane.showMessageDialog(null, "HAS PERDIDO");
                 }
                 if (contTanq == 0) {
                     termina = false;
-                    //jg.setPuntaje(score);
                     guardarJugador();
-
                     JOptionPane.showMessageDialog(null, "HAS GANADO");
                 }
                 

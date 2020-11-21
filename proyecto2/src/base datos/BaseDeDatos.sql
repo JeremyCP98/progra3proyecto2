@@ -29,7 +29,7 @@ CREATE TABLE `puntuaciones` (
   `puntuaciones` int(11) NOT NULL,
   `identificador` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`identificador`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `puntuaciones` (
 
 LOCK TABLES `puntuaciones` WRITE;
 /*!40000 ALTER TABLE `puntuaciones` DISABLE KEYS */;
-INSERT INTO `puntuaciones` VALUES ('jj',0,1),('josye',32,2),('fg',0,3),('',12,4);
+INSERT INTO `puntuaciones` VALUES ('trejos',32,2),('fio',0,3),('pepe',12,4),('Jugador',12,13),('Jugador',10,14);
 /*!40000 ALTER TABLE `puntuaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-15  0:08:20
+-- Dump completed on 2020-11-20 18:59:49

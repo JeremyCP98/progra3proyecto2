@@ -35,7 +35,6 @@ public class TanqueEnemigo extends Coordenada implements Runnable, Dibujable{
     }
     public TanqueEnemigo(Coordenada a, String ruta){
     
-        //super(a.getX(),a.getY());
         ii = new ImageIcon(this.getClass().getResource(ruta));
         this.cor1.setX(a.getX());
         this.cor1.setY(a.getY());
@@ -46,7 +45,6 @@ public class TanqueEnemigo extends Coordenada implements Runnable, Dibujable{
     }   
     public TanqueEnemigo(TanqueEnemigo nav){
         String ruta;
-        //super(nav.getX(),nav.getY());
         this.cor1.setX(nav.getX());
         this.cor1.setY(nav.getY());
         ruta = nav.imagen.getSource().toString();
@@ -77,25 +75,19 @@ public class TanqueEnemigo extends Coordenada implements Runnable, Dibujable{
         else this.setX(0);
     }
     
-    public BalaGrafica Bala(){ // 590.0 - 659.0
+    public BalaGrafica Bala(){ 
         Coordenada salida = new Coordenada(this.getX() + 63,this.getY()+100);
-        System.out.println(salida.getX() + " - " + salida.getY());
         BalaGrafica bala = new BalaGrafica(salida, 10, Color.black);
         
         return bala;
     }
     
     public void cicloBala(){
-        Timer tm;
-        
-       // tm = new Timer(10);
         for(int i = 0; i < this.balas.size(); i++){
             BalaGrafica y = (BalaGrafica)this.balas.get(i);
             float x = y.getY();
             y.setY(x += 9);
-           
-       }
-       
+       }       
     }
     
     public void borrarBalas(){
