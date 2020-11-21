@@ -90,8 +90,7 @@ public class TanqueEnemigo extends Coordenada implements Runnable, Dibujable{
        }       
     }
     
-    public void borrarBalas(){
-        
+    public void borrarBalas(){        
         balas.removeAll(balas);
     }
 }

@@ -189,7 +189,7 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
             JOptionPane.showMessageDialog(null, "usuario agregado exitosamente");
         } catch (Exception ex) {
 
-            JOptionPane.showMessageDialog(null, "Error al guardar producto");
+            JOptionPane.showMessageDialog(null, "Error al guardar el jugador");
             System.out.println(ex);
         }
     }
@@ -206,7 +206,7 @@ public class Pantalla extends JPanel implements Runnable, KeyListener, ActionLis
                 Coordenada medio = new Coordenada(tEnemigo.getX() + 50, tEnemigo.getY() + 75);
 
                 if (corBalaJug.getX() > izquierda.getX() && corBalaJug.getX() < derecha.getX() && corBalaJug.getY() < medio.getY() && corBalaJug.getY() + 25 > medio.getY()) {
-
+                    
                     array.add(explosion);
                     explosion.setY(tEnemigo.getY() - 50);
                     explosion.setX(tEnemigo.getX());
